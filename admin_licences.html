@@ -3,150 +3,122 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Licence Admin</title>
+<title>Client Relationship Desk – Licence Admin</title>
 <style>
-:root{--bg:#F3F7F3;--surface:#fff;--ink:#1A2B20;--muted:#56685C;--line:#D2DDD4;--green:#1B7A43;--red:#C62828;color-scheme:light;font-family:"Segoe UI",system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#0F1813;--surface:#17241C;--ink:#E3EEE6;--muted:#9BB2A3;--line:#2A3D31;--green:#6FD49A;--red:#FF7B7B;color-scheme:dark}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-size:15px}
-main{max-width:900px;margin:0 auto;padding:20px}
-h1{font-size:1.25rem;margin:0 0 4px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--muted);flex:1;min-width:150px}
-input,select,button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
-button{cursor:pointer;background:var(--surface)}
-button.primary{background:var(--green);color:var(--bg);border-color:var(--green);font-weight:600}
-button.danger{color:var(--red)}
-button.mini{padding:4px 9px;font-size:.82rem}
-.hint{color:var(--muted);font-size:.85rem;margin:6px 0}
-.err{color:var(--red);min-height:1.2em;font-size:.85rem;margin:6px 0}
-.wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-size:.8rem;color:var(--muted)}
-.tag{font-size:.78rem;padding:2px 9px;border-radius:99px;border:1px solid var(--line)}
-.ok{color:var(--green)}.bad{color:var(--red)}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-[hidden]{display:none!important}
+:root{--bg:#F3F7F3;--surface:#fff;--ink:#1A2B20;--muted:#56685C;--line:#D2DDD4;--green:#1B7A43;--red:#C62828;--amber:#8A5A00;font-family:"Segoe UI",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-size:15px}main{max-width:1000px;margin:0 auto;padding:22px}h1{font-size:1.35rem;margin:0 0 4px}h2{font-size:1.05rem;margin:0 0 12px}.hint{color:var(--muted);font-size:.86rem;margin:6px 0}.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:17px;margin-top:16px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:5px;font-size:.83rem;color:var(--muted);flex:1;min-width:160px}input,select,button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px 11px}button{cursor:pointer;background:var(--surface)}button:disabled{opacity:.55;cursor:not-allowed}button.primary{background:var(--green);color:white;border-color:var(--green);font-weight:600}button.danger{color:var(--red)}button.mini{padding:5px 8px;font-size:.8rem;margin:2px}.err{color:var(--red);min-height:1.2em;font-size:.86rem;margin:8px 0}.success{color:var(--green);min-height:1.2em;font-size:.86rem;margin:8px 0}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.wrap{overflow-x:auto;margin-top:12px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{font-size:.8rem;color:var(--muted)}.tag{font-size:.78rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line)}.ok{color:var(--green)}.bad{color:var(--red)}[hidden]{display:none!important}.muted{color:var(--muted)}
+@media(max-width:600px){main{padding:12px}.panel{padding:13px}.top{align-items:flex-start}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 <main>
-<div class="top"><div><h1>Licence Admin</h1><p class="hint" id="who">Sign in with your admin email.</p></div><button id="out" hidden>Sign out</button></div>
-
-<section class="panel" id="login">
-  <div class="row">
-    <label>Admin email<input id="email" type="email" autocomplete="email"></label>
-    <label id="codeL" hidden>6-digit code<input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label>
-    <button class="primary" id="go">Send code</button>
-  </div>
-  <p class="err" id="lerr" role="alert"></p>
-</section>
-
-<div id="app" hidden>
-  <section class="panel">
-    <h2 style="font-size:1.05rem;margin:0 0 12px">Give access (after GPay received)</h2>
+  <div class="top"><div><h1>Client Relationship Desk – Licence Admin</h1><p class="hint" id="who">Sign in using your administrator email.</p></div><button id="out" hidden>Sign out</button></div>
+  <section class="panel" id="login">
+    <h2>Administrator sign-in</h2>
     <div class="row">
-      <label>Customer email<input id="nEmail" type="email" placeholder="customer@firm.com"></label>
-      <label>Access for<select id="nMonths"><option value="1">1 month</option><option value="3">3 months</option><option value="6">6 months</option><option value="12" selected>12 months</option></select></label>
-      <button class="primary" id="add">Approve</button>
+      <label>Admin email<input id="email" type="email" autocomplete="email" placeholder="admin@example.com"></label>
+      <label id="codeL" hidden>Verification code<input id="code" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="Enter email code"></label>
+      <button class="primary" id="go">Send verification code</button>
     </div>
-    <p class="hint">If the email is already in the list, the time is added on top of what is left.</p>
-    <p class="err" id="aerr" role="alert"></p>
+    <p class="hint">Only the administrator email configured in Supabase can manage licences.</p>
+    <p class="err" id="lerr" role="alert"></p>
   </section>
-
-  <section class="panel">
-    <div class="top"><h2 style="font-size:1.05rem;margin:0">Customers</h2><input id="q" placeholder="Search email" style="max-width:220px"></div>
-    <div class="wrap"><table><thead><tr><th>Email</th><th>Status</th><th>Valid till</th><th>Days left</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
-  </section>
-</div>
+  <div id="app" hidden>
+    <section class="panel">
+      <h2>Approve a customer</h2>
+      <div class="row">
+        <label>Customer email<input id="nEmail" type="email" placeholder="customer@firm.com"></label>
+        <label>Access duration<select id="nMonths"><option value="1">1 month</option><option value="3">3 months</option><option value="6">6 months</option><option value="12" selected>12 months</option></select></label>
+        <button class="primary" id="add">Approve access</button>
+      </div>
+      <p class="hint">Approve only after payment is received. If the customer already has a licence, the new duration is added to the later of today or their current expiry date.</p>
+      <p class="err" id="aerr" role="alert"></p><p class="success" id="amsg" role="status"></p>
+    </section>
+    <section class="panel">
+      <div class="top"><div><h2 style="margin-bottom:3px">Customer licences</h2><p class="hint" id="count">Loading licences…</p></div><div class="row" style="align-items:center"><input id="q" type="search" placeholder="Search email" aria-label="Search email"><button id="refresh">Refresh</button></div></div>
+      <div class="wrap"><table><thead><tr><th>Email</th><th>Status</th><th>Valid until</th><th>Days left</th><th>Actions</th></tr></thead><tbody id="rows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody></table></div>
+    </section>
+  </div>
 </main>
-
 <script>
 (function(){
 'use strict';
-const CFG={url:'PASTE_SUPABASE_PROJECT_URL',key:'PASTE_SUPABASE_ANON_KEY'};
-const sb=supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true}});
-const g=id=>document.getElementById(id);
-let step='email',list=[];
+const CFG={url:'https://fgcncrvtyuvivldjuevj.supabase.co',key:'sb_publishable_Gy0Ks6__dOhQlkpj-8_ZNg_tPLCZFSg'};
+const sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);let step='email',licences=[];
 const DAY=86400000;
-const fmt=d=>new Date(d).toLocaleDateString('en-GB');
-const addMonths=(d,m)=>{const x=new Date(d);x.setMonth(x.getMonth()+m);return x;};
-const ok=s=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s);
-
-function setStep(s){step=s;g('codeL').hidden=s!=='code';g('go').textContent=s==='code'?'Verify':'Send code';}
-
-async function enter(session){
+const validEmail=s=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const dateText=s=>s?new Date(s).toLocaleDateString('en-GB'):'—';
+const addMonths=(date,months)=>{const d=new Date(date),day=d.getDate();d.setMonth(d.getMonth()+months);if(d.getDate()<day)d.setDate(0);return d;};
+function setStep(next){step=next;$('codeL').hidden=next!=='code';$('go').textContent=next==='code'?'Verify code':'Send verification code';$('code').value='';}
+function message(id,text){$(id).textContent=text||'';}
+async function startApp(session){
+  message('lerr','');
   const {data,error}=await sb.rpc('is_admin');
-  if(error||data!==true){await sb.auth.signOut();setStep('email');g('lerr').textContent='This email is not an admin.';return;}
-  g('who').textContent='Signed in as '+session.user.email;
-  g('login').hidden=true;g('app').hidden=false;g('out').hidden=false;
-  load();
+  if(error){await sb.auth.signOut();$('app').hidden=true;$('login').hidden=false;message('lerr','Admin verification is not configured yet. Please complete the one-time Supabase SQL setup provided with this page. Details: '+error.message);return;}
+  if(data!==true){await sb.auth.signOut();$('app').hidden=true;$('login').hidden=false;message('lerr','This email is not authorized as the administrator.');return;}
+  $('who').textContent='Signed in as '+session.user.email;$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;await loadLicences();
 }
-async function load(){
-  const {data,error}=await sb.from('licenses').select('*').order('expires_at',{ascending:true}).range(0,999);
-  if(error){g('aerr').textContent=error.message;return;}
-  list=data;draw();
+async function loadLicences(){
+  message('aerr','');$('rows').innerHTML='<tr><td colspan="5" class="muted">Loading licences…</td></tr>';
+  const {data,error}=await sb.from('licenses').select('id,email,status,ends_at,created_at,notes').order('ends_at',{ascending:true}).range(0,999);
+  if(error){message('aerr','Could not load licences: '+error.message);$('rows').innerHTML='<tr><td colspan="5">No data available. Check the admin RLS policy.</td></tr>';return;}
+  licences=data||[];draw();
 }
 function draw(){
-  const q=g('q').value.trim().toLowerCase(),now=Date.now(),tb=g('rows');
-  tb.textContent='';
-  const rows=list.filter(r=>r.email.includes(q));
-  if(!rows.length){const tr=tb.insertRow(),td=tr.insertCell();td.colSpan=5;td.className='hint';td.textContent='No customers yet.';return;}
-  rows.forEach(r=>{
-    const left=Math.ceil((new Date(r.expires_at)-now)/DAY),expired=left<=0,live=r.status==='active'&&!expired;
-    const tr=tb.insertRow();
-    tr.insertCell().textContent=r.email;
-    const st=tr.insertCell(),t=document.createElement('span');
-    t.className='tag '+(live?'ok':'bad');t.textContent=r.status==='suspended'?'Suspended':expired?'Expired':'Active';st.append(t);
-    tr.insertCell().textContent=fmt(r.expires_at);
-    tr.insertCell().textContent=expired?'0':String(left);
-    const ac=tr.insertCell();
-    const mk=(txt,cls,fn)=>{const b=document.createElement('button');b.className='mini '+cls;b.textContent=txt;b.onclick=fn;ac.append(b,' ');};
-    mk('Renew 12 months','',()=>grant(r.email,12));
-    mk(r.status==='active'?'Suspend':'Activate','',()=>setStatus(r.email,r.status==='active'?'suspended':'active'));
-    mk('Delete','danger',()=>del(r.email));
+  const query=$('q').value.trim().toLowerCase(),now=Date.now(),body=$('rows');body.replaceChildren();
+  const filtered=licences.filter(r=>(r.email||'').toLowerCase().includes(query));$('count').textContent=filtered.length+' of '+licences.length+' customer licence(s)';
+  if(!filtered.length){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=5;td.className='muted';td.textContent='No matching customers.';return;}
+  filtered.forEach(r=>{
+    const expiry=r.ends_at?new Date(r.ends_at).getTime():0,left=Math.ceil((expiry-now)/DAY),expired=!expiry||left<=0,active=r.status==='active'&&!expired;
+    const tr=body.insertRow();tr.insertCell().textContent=r.email;
+    const st=tr.insertCell(),tag=document.createElement('span');tag.className='tag '+(active?'ok':'bad');tag.textContent=r.status==='suspended'?'Suspended':expired?'Expired':'Active';st.append(tag);
+    tr.insertCell().textContent=dateText(r.ends_at);tr.insertCell().textContent=expired?'0':String(left);
+    const actions=tr.insertCell();
+    const button=(label,cls,fn)=>{const b=document.createElement('button');b.className='mini '+cls;b.textContent=label;b.addEventListener('click',fn);actions.append(b);};
+    button('Renew 12 months','',()=>grant(r.email,12));
+    button(r.status==='active'?'Suspend':'Activate','',()=>changeStatus(r.email,r.status==='active'?'suspended':'active'));
+    button('Delete','danger',()=>removeLicence(r.email));
   });
 }
 async function grant(email,months){
-  g('aerr').textContent='';
-  const cur=list.find(r=>r.email===email),base=cur&&new Date(cur.expires_at)>new Date()?new Date(cur.expires_at):new Date();
-  const {error}=await sb.from('licenses').upsert({email,status:'active',expires_at:addMonths(base,months).toISOString()},{onConflict:'email'});
-  if(error)g('aerr').textContent=error.message;else load();
+  message('aerr','');message('amsg','');
+  const current=licences.find(r=>r.email.toLowerCase()===email.toLowerCase());
+  const oldExpiry=current?.ends_at?new Date(current.ends_at):new Date();
+  const base=oldExpiry>new Date()?oldExpiry:new Date();
+  const endsAt=addMonths(base,months).toISOString();
+  const {error}=await sb.from('licenses').upsert({email:email.toLowerCase(),status:'active',ends_at:endsAt},{onConflict:'email'});
+  if(error){message('aerr','Could not approve/renew: '+error.message);return;}
+  message('amsg',email+' approved until '+dateText(endsAt)+'.');await loadLicences();
 }
-async function setStatus(email,status){
-  const {error}=await sb.from('licenses').update({status}).eq('email',email);
-  if(error)g('aerr').textContent=error.message;else load();
+async function changeStatus(email,status){
+  message('aerr','');const {error}=await sb.from('licenses').update({status}).eq('email',email);
+  if(error){message('aerr','Could not update status: '+error.message);return;}message('amsg',email+' is now '+status+'.');await loadLicences();
 }
-async function del(email){
-  if(!confirm('Remove '+email+' completely? Their data stays safe but they cannot log in.'))return;
+async function removeLicence(email){
+  if(!confirm('Delete the licence for '+email+'? This removes their access; it does not delete their application data.'))return;
   const {error}=await sb.from('licenses').delete().eq('email',email);
-  if(error)g('aerr').textContent=error.message;else load();
+  if(error){message('aerr','Could not delete licence: '+error.message);return;}message('amsg','Licence deleted for '+email+'.');await loadLicences();
 }
-
-g('add').onclick=()=>{const e=g('nEmail').value.trim().toLowerCase();
-  if(!ok(e))return g('aerr').textContent='Enter a valid email.';
-  grant(e,parseInt(g('nMonths').value,10)).then(()=>{g('nEmail').value='';});};
-g('q').oninput=draw;
-g('out').onclick=async()=>{await sb.auth.signOut();location.reload();};
-g('go').onclick=async()=>{
-  g('lerr').textContent='';const email=g('email').value.trim().toLowerCase();
-  if(!ok(email))return g('lerr').textContent='Enter a valid email.';
-  g('go').disabled=true;
+$('add').addEventListener('click',async()=>{const email=$('nEmail').value.trim().toLowerCase(),months=Number($('nMonths').value);if(!validEmail(email)){message('aerr','Please enter a valid customer email.');return;}if(![1,3,6,12].includes(months)){message('aerr','Choose a valid access duration.');return;}$('add').disabled=true;try{await grant(email,months);if(!$('aerr').textContent)$('nEmail').value='';}finally{$('add').disabled=false;}});
+$('q').addEventListener('input',draw);$('refresh').addEventListener('click',loadLicences);
+$('out').addEventListener('click',async()=>{await sb.auth.signOut();location.reload();});
+$('go').addEventListener('click',async()=>{
+  message('lerr','');const email=$('email').value.trim().toLowerCase();if(!validEmail(email)){message('lerr','Please enter a valid email address.');return;}
+  $('go').disabled=true;
   try{
     if(step==='email'){
-      const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
-      if(error)g('lerr').textContent=error.message;else setStep('code');
+      const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
+      if(error){message('lerr',error.message);}else{setStep('code');message('lerr','Verification code sent. Check your inbox and spam folder.');}
     }else{
-      const {data,error}=await sb.auth.verifyOtp({email,token:g('code').value.trim(),type:'email'});
-      if(error||!data.session)g('lerr').textContent='Wrong or expired code.';else enter(data.session);
+      const {data,error}=await sb.auth.verifyOtp({email,token:$('code').value.trim(),type:'email'});
+      if(error||!data?.session){message('lerr',error?.message||'The code is invalid or expired.');}else{await startApp(data.session);}
     }
-  }finally{g('go').disabled=false;}
-};
-g('email').onkeydown=g('code').onkeydown=e=>{if(e.key==='Enter')g('go').click();};
-sb.auth.getSession().then(({data})=>{if(data.session)enter(data.session);});
+  }catch(e){message('lerr',e.message||'Something went wrong.');}finally{$('go').disabled=false;}
+});
+$('email').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click();});$('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click();});
+sb.auth.getSession().then(({data,error})=>{if(error){message('lerr',error.message);return;}if(data.session)startApp(data.session);}).catch(e=>message('lerr',e.message));
 })();
 </script>
 </body>
